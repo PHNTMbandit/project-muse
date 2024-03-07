@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ThemeModeToggle } from "@/components/ui/themeModeToggle";
 import { invoices } from "../lib/placeholder-data";
 
