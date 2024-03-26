@@ -56,4 +56,10 @@
   body {
     @apply bg-background text-foreground;
   }
+  h1 {
+    @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
+  }
+  h4 {
+    @apply scroll-m-20 text-xl font-extrabold tracking-tight lg:text-2xl;
+  }
 }
