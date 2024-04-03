@@ -1,15 +1,17 @@
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { Button } from "@/components/ui/button";
 
 const LogInPage = () => {
   return (
-    <div className="flex flex-col gap-4 w-72 h-fit justify-end items-center bg-secondary/50 p-4 rounded-xl shadow-xl ring-1 ring-black/5">
-      <h4>Log in</h4>
-      <Link
-        href={"/dashboard"}
-        className="w-full">
+    <>
+      <div className="space-y-2">
+        <h1>Welcome to Muse.</h1>
+        <h1>The new way to connect.</h1>
+        <h1>Let&apos;s get started.</h1>
+      </div>
+      <Link href={"/dashboard"}>
         <Button className="relative rounded-xl bg-primary/20 w-full">
           <Image
             src="/images/Spotify-Logo-White.png"
@@ -21,7 +23,7 @@ const LogInPage = () => {
           />
         </Button>
       </Link>
-    </div>
+    </>
   );
 };
 
