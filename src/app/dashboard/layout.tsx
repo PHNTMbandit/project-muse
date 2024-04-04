@@ -1,3 +1,4 @@
+import { Header } from "@/components/header";
 import type { ReactNode } from "react";
 
 type LayoutProps = {
@@ -6,9 +7,10 @@ type LayoutProps = {
 
 function DashboardLayout({ children }: LayoutProps) {
   return (
-    <>
+    <div className="p-4 space-y-8">
+      <Header />
       <section>{children}</section>
-    </>
+    </div>
   );
 }
 

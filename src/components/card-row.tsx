@@ -6,19 +6,21 @@ import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 
 export interface CardRowProps
   extends React.InputHTMLAttributes<HTMLDivElement> {
+  title: string;
   games: Game[];
 }
 
 const CardRow = React.forwardRef<HTMLDivElement, CardRowProps>(
-  ({ games, className, children, ...props }, ref) => {
+  ({ games, title, className, children, ...props }, ref) => {
     return (
       <div
         className={cn("", className)}
         ref={ref}
         {...props}>
         {children}
-        <ScrollArea className="w-screen whitespace-nowrap pb-4">
-          <div className="flex gap-4 ">
+        <h3>{title}</h3>
+        <ScrollArea className="w-full h-fit whitespace-nowrap snap-x snap-start">
+          <div className="flex m-2 mb-4 gap-4 snap-center">
             {games.map((game, index) => (
               <Card
                 key={index}
@@ -26,10 +28,7 @@ const CardRow = React.forwardRef<HTMLDivElement, CardRowProps>(
               />
             ))}
           </div>
-          <ScrollBar
-            orientation="horizontal"
-            className=""
-          />
+          <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </div>
     );
