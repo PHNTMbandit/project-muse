@@ -24,6 +24,16 @@ const config = {
       },
     },
     extend: {
+      dropShadow: {
+        glowPrimary: [
+          "0 0px 3px hsl(var(--primary))",
+          "0 0px 5px hsl(var(--primary))",
+        ],
+        glowForeground: [
+          "0 0px 3px hsl(var(--foreground))",
+          "0 0px 5px hsl(var(--foreground))",
+        ],
+      },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },

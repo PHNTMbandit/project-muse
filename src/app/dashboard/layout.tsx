@@ -5,13 +5,11 @@ type LayoutProps = {
   children: ReactNode;
 };
 
-function DashboardLayout({ children }: LayoutProps) {
+export default function DashboardLayout({ children }: LayoutProps) {
   return (
-    <div className="p-4 space-y-8">
+    <>
       <Header />
-      <section>{children}</section>
-    </div>
+      <section className="pt-8">{children}</section>
+    </>
   );
 }
-
-export default DashboardLayout;
