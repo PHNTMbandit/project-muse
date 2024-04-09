@@ -9,7 +9,7 @@ export default function DashboardLayout({ children }: LayoutProps) {
   return (
     <>
       <Header />
-      <section className="pt-8">{children}</section>
+      <section className="pt-4">{children}</section>
     </>
   );
 }

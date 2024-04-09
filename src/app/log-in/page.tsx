@@ -49,7 +49,7 @@ export default function LogInPage() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-4 w-3/4 border p-6 rounded-xl">
+          className="space-y-4 w-3/4">
           <div>
             <h2>Log In</h2>
             <p>
@@ -100,7 +100,8 @@ export default function LogInPage() {
           ) : (
             <Button
               type="submit"
-              className="w-full">
+              className="w-full"
+              variant={"outline"}>
               Log In
             </Button>
           )}
