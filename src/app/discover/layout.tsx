@@ -5,11 +5,11 @@ type LayoutProps = {
   children: ReactNode;
 };
 
-export default function DashboardLayout({ children }: LayoutProps) {
+export default async function DiscoverLayout({ children }: LayoutProps) {
   return (
-    <>
+    <main className="p-16">
       <Header />
       <section className="pt-4">{children}</section>
-    </>
+    </main>
   );
 }

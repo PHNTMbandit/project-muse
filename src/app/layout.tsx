@@ -17,8 +17,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning>
-      <body
-        className={`${inter.className} bg-[url('/images/default-background.jpg')] bg-cover antialiased`}>
+      <body className={`${inter.className} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
