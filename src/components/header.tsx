@@ -33,9 +33,10 @@ async function Header({ className }: HeaderProps) {
           </Link>
         ))}
       </div>
-      <div className="basis-1/3">
-        <SearchBar placeholder={"Search games"} />
-      </div>
+      <SearchBar
+        placeholder={"Search games"}
+        className="basis-1/3 flex justify-end"
+      />
     </div>
   );
 }
