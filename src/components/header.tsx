@@ -26,8 +26,8 @@ async function Header({ className }: HeaderProps) {
             key={index}
             href={`/${page}`}>
             <Button
-              variant={"tab"}
-              size={"none"}>
+              variant={"ghost"}
+              className=" ">
               <h2>{page}</h2>
             </Button>
           </Link>

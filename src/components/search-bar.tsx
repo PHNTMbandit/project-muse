@@ -3,7 +3,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { CiSearch } from "react-icons/ci";
-import { getGames } from "@/lib/games";
+import { getGames } from "@/app/api/games";
 import { Game } from "@/types/game-type";
 import debounce from "lodash.debounce";
 import { CommandDialog, CommandShortcut } from "@/components/ui/command";
@@ -11,6 +11,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 
 export interface SearchBarProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -35,17 +36,9 @@ const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
       setLoading(true);
     }
 
-    React.useEffect(() => {
-      const down = (e: KeyboardEvent) => {
-        if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-          e.preventDefault();
-          setOpen((open) => !open);
-        }
-      };
-      document.addEventListener("keydown", down);
-      handleSearch("");
-      return () => document.removeEventListener("keydown", down);
-    }, []);
+    function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
+      setOpen(false);
+    }
 
     return (
       <div
@@ -58,7 +51,7 @@ const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
           variant={"outline"}>
           <CommandShortcut className="flex items-center gap-2">
             <CiSearch />
-            <h6>CTRL+K</h6>
+            <h6>Search</h6>
           </CommandShortcut>
         </Button>
         <CommandDialog
@@ -73,11 +66,14 @@ const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
               <ScrollArea className="flex flex-col h-96">
                 {results.map((result, index) => (
                   <ul key={index}>
-                    <Button
-                      variant={"outline"}
-                      className="w-full rounded-none">
-                      {result.name}
-                    </Button>
+                    <Link href={`/games/${result.id}`}>
+                      <Button
+                        variant={"outline"}
+                        onClick={handleClick}
+                        className="w-full rounded-none">
+                        {result.name}
+                      </Button>
+                    </Link>
                   </ul>
                 ))}
               </ScrollArea>

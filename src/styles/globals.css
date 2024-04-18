@@ -63,7 +63,7 @@
     @apply uppercase text-2xl font-extrabold;
   }
   h2 {
-    @apply text-lg font-bold capitalize;
+    @apply text-lg font-bold uppercase font-light;
   }
   h3 {
     @apply text-lg font-semibold;

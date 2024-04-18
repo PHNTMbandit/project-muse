@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import type { Metadata } from "next";
 import { inter } from "../components/ui/fonts";
 import { ThemeProvider } from "../components/theme-provider";
+import { Header } from "@/components/header";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,10 +21,12 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
           disableTransitionOnChange>
-          {children}
+          <main className="p-16">
+            <Header />
+            <section className="pt-4">{children}</section>
+          </main>
         </ThemeProvider>
       </body>
     </html>
