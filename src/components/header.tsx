@@ -1,21 +1,24 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import * as React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/utils/supabase/server";
 import { SearchBar } from "./search-bar";
+import { Page } from "@/types/page";
 
 type HeaderProps = {
   className?: string;
 };
 
-const pages = ["discover", "library"];
+const pages: Page[] = [
+  { label: "Discover", url: "/discover", color: "accent-purple" },
+  { label: "Games", url: "/games", color: "accent-blue" },
+];
 
-async function Header({ className }: HeaderProps) {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+function Header({ className }: HeaderProps) {
+  const pathname = usePathname();
 
   return (
     <div className={cn("flex items-center", className)}>
@@ -24,11 +27,20 @@ async function Header({ className }: HeaderProps) {
         {pages.map((page, index) => (
           <Link
             key={index}
-            href={`/${page}`}>
+            href={page.url}>
             <Button
               variant={"ghost"}
-              className=" ">
-              <h2>{page}</h2>
+              className={cn(
+                `hover:border-${page.color}`,
+                pathname.includes(page.url) && `bg-${page.color}`
+              )}>
+              <h2
+                className={cn(
+                  `text-${page.color}`,
+                  pathname.includes(page.url) && "text-primary"
+                )}>
+                {page.label}
+              </h2>
             </Button>
           </Link>
         ))}

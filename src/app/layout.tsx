@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import type { Metadata } from "next";
-import { inter } from "../components/ui/fonts";
+import { inter, comfortaa } from "../components/ui/fonts";
 import { ThemeProvider } from "../components/theme-provider";
 import { Header } from "@/components/header";
 
@@ -18,7 +18,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning>
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${comfortaa.className} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

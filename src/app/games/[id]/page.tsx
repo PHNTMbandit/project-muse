@@ -1,5 +1,6 @@
 import { getGame } from "@/app/api/games";
-import { Game } from "@/types/game-type";
+import { Game } from "@/types/game";
+import Image from "next/image";
 
 type GameProps = {
   params: {

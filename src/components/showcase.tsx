@@ -12,7 +12,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Game } from "@/types/game-type";
+import { Game } from "@/types/game";
 import Image from "next/image";
 
 export interface ShowcaseProps

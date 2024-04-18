@@ -14,6 +14,14 @@ const config = {
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
+  safelist: [
+    "hover:border-accent-blue",
+    "hover:border-accent-purple",
+    "text-accent-blue",
+    "text-accent-purple",
+    "bg-accent-blue",
+    "bg-accent-purple",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -62,6 +70,8 @@ const config = {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          purple: "hsl(var(--accent-purple))",
+          blue: "hsl(var(--accent-blue))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",

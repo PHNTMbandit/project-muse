@@ -24,6 +24,8 @@
     --input: 240 5.9% 90%;
     --ring: 240 5.9% 10%;
     --radius: 0.5rem;
+    --accent-purple: 265, 83%, 57%;
+    --accent-blue: 217, 100%, 61%;
   }
 
   .dark {
@@ -46,6 +48,8 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
+    --accent-purple: 265, 83%, 57%;
+    --accent-blue: 217, 100%, 61%;
   }
 }
 
@@ -57,27 +61,9 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground scroll-m-20 tracking-tight;
+    @apply bg-background text-foreground scroll-m-20;
   }
   h1 {
-    @apply uppercase text-2xl font-extrabold;
-  }
-  h2 {
-    @apply text-lg font-bold uppercase font-light;
-  }
-  h3 {
-    @apply text-lg font-semibold;
-  }
-  h4 {
-    @apply font-bold;
-  }
-  h5 {
-    @apply font-bold capitalize;
-  }
-  h6 {
-    @apply text-sm font-semibold capitalize;
-  }
-  p {
-    @apply text-xs;
+    @apply text-2xl font-extrabold uppercase tracking-widest;
   }
 }

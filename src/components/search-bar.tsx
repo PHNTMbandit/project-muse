@@ -2,15 +2,14 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { CiSearch } from "react-icons/ci";
+import { TbSearch } from "react-icons/tb";
 import { getGames } from "@/app/api/games";
-import { Game } from "@/types/game-type";
+import { Game } from "@/types/game";
 import debounce from "lodash.debounce";
-import { CommandDialog, CommandShortcut } from "@/components/ui/command";
+import { CommandDialog } from "@/components/ui/command";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 
 export interface SearchBarProps
@@ -48,11 +47,10 @@ const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
         {children}
         <Button
           onClick={() => setOpen(!open)}
-          variant={"outline"}>
-          <CommandShortcut className="flex items-center gap-2">
-            <CiSearch />
-            <h6>Search</h6>
-          </CommandShortcut>
+          variant={"outline"}
+          className="space-x-2">
+          <TbSearch />
+          <h2>Search games</h2>
         </Button>
         <CommandDialog
           open={open}

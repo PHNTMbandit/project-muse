@@ -1,4 +1,4 @@
-import { Game } from "@/types/game-type";
+import { Game } from "@/types/game";
 
 export const getGames = async (searchText: string): Promise<Game[]> => {
   try {
@@ -15,7 +15,7 @@ export const getGames = async (searchText: string): Promise<Game[]> => {
   }
 };
 
-export const getGame = async (id: string): Promise<Game[]> => {
+export const getGame = async (id: string): Promise<Game> => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_RAWG_URL}/games/${id}?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}`
