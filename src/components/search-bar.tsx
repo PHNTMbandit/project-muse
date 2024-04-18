@@ -50,7 +50,7 @@ const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
           variant={"outline"}
           className="space-x-2">
           <TbSearch />
-          <h2>Search games</h2>
+          <h2 className="hidden lg:block">Search games</h2>
         </Button>
         <CommandDialog
           open={open}

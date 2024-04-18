@@ -21,6 +21,8 @@ const config = {
     "text-accent-purple",
     "bg-accent-blue",
     "bg-accent-purple",
+    "stroke-accent-blue",
+    "stroke-accent-purple",
   ],
   prefix: "",
   theme: {
