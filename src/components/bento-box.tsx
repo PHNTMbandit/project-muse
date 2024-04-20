@@ -2,21 +2,15 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 export interface BentoBoxProps
-  extends React.InputHTMLAttributes<HTMLDivElement> {
-  title: string;
-}
+  extends React.InputHTMLAttributes<HTMLDivElement> {}
 
 const BentoBox = React.forwardRef<HTMLDivElement, BentoBoxProps>(
-  ({ title, className, children, ...props }, ref) => {
+  ({ className, children, ...props }, ref) => {
     return (
       <div
-        className={cn(
-          "rounded-xl p-4 space-y-3 bg-primary/15 shadow-lg ring-1 ring-black/5 backdrop-blur",
-          className
-        )}
+        className={cn("rounded-3xl shadow-lg ring-1 ring-white/5", className)}
         ref={ref}
         {...props}>
-        <h4>{title}</h4>
         {children}
       </div>
     );

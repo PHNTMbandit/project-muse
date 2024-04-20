@@ -54,6 +54,9 @@
 }
 
 @layer components {
+  .glassmorphism {
+    @apply rounded-xl bg-white/20 backdrop-blur-lg shadow-lg ring-1 ring-black/5;
+  }
 }
 
 @layer base {
@@ -65,5 +68,11 @@
   }
   h1 {
     @apply text-2xl font-extrabold uppercase tracking-widest;
+  }
+  h3 {
+    @apply text-xl font-semibold;
+  }
+  p {
+    @apply text-sm tracking-tight font-light;
   }
 }
