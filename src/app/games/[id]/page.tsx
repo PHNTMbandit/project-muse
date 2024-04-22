@@ -1,4 +1,5 @@
 import { getGame } from "@/app/api/games";
+import { getPlatformIcon } from "@/app/api/platforms";
 import { BentoBox } from "@/components/bento-box";
 import { Game } from "@/types/game";
 import { getColorFromURL } from "color-thief-node";
@@ -21,27 +22,42 @@ export default async function GamePage({ params }: GameProps) {
   const imageColour = await getPrimaryColour();
 
   return (
-    <section className="flex flex-wrap justify-center gap-4">
-      <div>
+    <section className="flex flex-col lg:grid grid-cols-6 gap-4">
+      <div className="flex flex-col space-y-4 col-span-2">
         <BentoBox
-          className="p-6 w-72 flex-none"
+          className="p-6"
           style={{ backgroundColor: `#${imageColour}` }}>
           <h3 className="text-3xl">{game.name}</h3>
         </BentoBox>
         <BentoBox
-          className="p-6 w-56 space-y-2"
+          className="p-6 col-span-3 grow h-40"
           style={{ backgroundColor: `#${imageColour}` }}>
-          {game.platforms.map((platform, index) => (
-            <div
-              key={index}
-              className="flex gap-4 justify-between">
-              <p>{platform.platform.name}</p>
-              <p>{platform.released_at}</p>
-            </div>
-          ))}
+          <p className="text-ellipsis overflow-hidden h-full">
+            {game.description.replace(/<\/?p>/g, "")}
+          </p>
+        </BentoBox>
+        <BentoBox
+          className="p-6 space-y-2"
+          style={{ backgroundColor: `#${imageColour}` }}>
+          {game.platforms
+            .sort((a, b) => a.platform.name.localeCompare(b.platform.name))
+            .map((platform, index) => {
+              const PlatformIcon = getPlatformIcon(platform.platform.name);
+              return (
+                <div
+                  key={index}
+                  className="flex gap-4 justify-between">
+                  <div className="flex gap-2">
+                    <PlatformIcon />
+                    <p>{platform.platform.name}</p>
+                  </div>
+                  <p>{platform.released_at}</p>
+                </div>
+              );
+            })}
         </BentoBox>
       </div>
-      <BentoBox className="aspect-video w-96 flex-none">
+      <BentoBox className="aspect-video col-span-4">
         <div className="relative w-full h-full">
           <Image
             src={game.background_image}
@@ -52,11 +68,6 @@ export default async function GamePage({ params }: GameProps) {
             className="object-cover rounded-3xl shadow shadow-transparent"
           />
         </div>
-      </BentoBox>
-      <BentoBox
-        className="p-6 w-96"
-        style={{ backgroundColor: `#${imageColour}` }}>
-        <p className="">{game.description.replace(/<\/?p>/g, "")}</p>
       </BentoBox>
     </section>
   );
