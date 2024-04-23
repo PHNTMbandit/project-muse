@@ -1,8 +1,4 @@
-import { IconType } from "react-icons/lib";
 import { Platform } from "@/types/platform";
-import { FaXbox, FaPlaystation } from "react-icons/fa";
-import { FaComputer, FaCircleQuestion } from "react-icons/fa6";
-import { BsNintendoSwitch } from "react-icons/bs";
 
 export const getPlatform = async (id: number): Promise<Platform> => {
   try {
@@ -15,20 +11,5 @@ export const getPlatform = async (id: number): Promise<Platform> => {
   } catch (error) {
     console.error(error);
     throw error;
-  }
-};
-
-export const getPlatformIcon = (name: string): IconType => {
-  switch (true) {
-    case name.includes("Xbox"):
-      return FaXbox;
-    case name.includes("PlayStation"):
-      return FaPlaystation;
-    case name.includes("PC"):
-      return FaComputer;
-    case name.includes("Switch"):
-      return BsNintendoSwitch;
-    default:
-      return FaCircleQuestion;
   }
 };
