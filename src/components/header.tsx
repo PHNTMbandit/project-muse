@@ -8,6 +8,16 @@ import { Button } from "@/components/ui/button";
 import { SearchBar } from "./search-bar";
 import { Page } from "@/types/page";
 import { TbHome, TbDeviceGamepad } from "react-icons/tb";
+import { ProfilePicture } from "./profile-picture";
+import { createClient } from "@/utils/supabase/client";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type HeaderProps = {
   className?: string;
@@ -27,7 +37,7 @@ function Header({ className }: HeaderProps) {
   const pathname = usePathname();
 
   return (
-    <div className={cn("flex items-center", className)}>
+    <div className={cn("flex items-center mb-16", className)}>
       <h1 className="basis-1/3">Muse</h1>
       <nav className="basis-1/3 flex justify-center gap-8">
         {pages.map((page, index) => (
@@ -57,10 +67,22 @@ function Header({ className }: HeaderProps) {
           </Link>
         ))}
       </nav>
-      <SearchBar
-        placeholder={"Search games"}
-        className="basis-1/3 flex justify-end"
-      />
+      <div className="basis-1/3 flex justify-end gap-4">
+        <SearchBar placeholder={"Search games"} />
+        <DropdownMenu>
+          <DropdownMenuTrigger className="focus:outline-none">
+            <ProfilePicture />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel></DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem>Billing</DropdownMenuItem>
+            <DropdownMenuItem>Team</DropdownMenuItem>
+            <DropdownMenuItem>Subscription</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   );
 }

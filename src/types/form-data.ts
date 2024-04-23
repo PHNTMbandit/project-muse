@@ -1,5 +1,5 @@
 export interface LogInFormData {
-  email: string;
+  username: string;
   password: string;
 }
 

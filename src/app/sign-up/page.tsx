@@ -14,6 +14,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { signup } from "./action";
 import { SignUpFormData } from "@/types/form-data";
+import { FaUser, FaLock } from "react-icons/fa";
+import { MdAlternateEmail } from "react-icons/md";
+import { BentoBox } from "@/components/bento-box";
+import { RxReload } from "react-icons/rx";
+import { useState } from "react";
+import Link from "next/link";
+import { Logo } from "@/components/logo";
 
 const signUpFormSchema = z
   .object({
@@ -37,6 +44,8 @@ const signUpFormSchema = z
   });
 
 export default function SignUpPage() {
+  const [loading, setloading] = useState(false);
+
   const form = useForm<SignUpFormData>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
@@ -47,83 +56,106 @@ export default function SignUpPage() {
   });
 
   async function onSubmit(data: SignUpFormData) {
+    setloading(true);
     signup(data);
   }
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  placeholder="Username"
-                  required
-                  {...field}
+    <section className="flex h-screen w-screen justify-center items-center">
+      <div className="flex flex-col lg:flex-row gap-4 w-1/2">
+        <BentoBox className="bg-accent-blue basis-1/3 flex justify-center items-center">
+          <Logo />
+        </BentoBox>
+        <div className="basis-2/3 flex flex-col gap-4">
+          <BentoBox
+            className="bg-accent-purple basis-4/5"
+            header="Let's get you started...">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          icon={FaUser}
+                          type={"username"}
+                          placeholder="Username"
+                          required
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  type={"email"}
-                  placeholder="Email"
-                  required
-                  {...field}
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          icon={FaLock}
+                          type={"password"}
+                          placeholder="Password"
+                          required
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  type={"password"}
-                  placeholder="Password"
-                  required
-                  {...field}
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          icon={FaLock}
+                          type={"password"}
+                          placeholder="Confirm Password"
+                          required
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  type={"password"}
-                  placeholder="Confirm Password"
-                  required
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
+                <p>
+                  Already have an account?{" "}
+                  <Link
+                    href={"/log-in"}
+                    className="font-bold hover:underline">
+                    Log In
+                  </Link>
+                </p>
+                {loading ? (
+                  <Button
+                    disabled
+                    className="w-full">
+                    <RxReload className="mr-2 h-4 w-4 animate-spin" />
+                    Signing up...
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    className="w-full">
+                    <p className="font-bold uppercase">Sign Up</p>
+                  </Button>
+                )}
+              </form>
+            </Form>
+          </BentoBox>
+          <BentoBox className="bg-accent-blue basis-1/5"></BentoBox>
+        </div>
+      </div>
+    </section>
   );
 }

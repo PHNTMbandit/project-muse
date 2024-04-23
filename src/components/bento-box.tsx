@@ -4,17 +4,19 @@ import Color from "color";
 
 export interface BentoBoxProps
   extends React.AnchorHTMLAttributes<HTMLDivElement> {
-  boxColour: Color;
+  boxColour?: Color;
   header?: string;
+  interactable?: boolean;
 }
 
 const BentoBox = React.forwardRef<HTMLDivElement, BentoBoxProps>(
-  ({ boxColour, header, className, children, ...props }, ref) => {
+  ({ boxColour, header, interactable, className, children, ...props }, ref) => {
     return (
       <div
         className={cn(
-          "rounded-3xl shadow-lg ring-1 ring-white/5 text-left py-4 px-6",
-          { "text-secondary": boxColour.isLight() },
+          "rounded-3xl outline outline-black text-left py-4 px-6 transition-all",
+          { "text-secondary": boxColour?.isLight() },
+          { "hover:scale-105 hover:z-10 cursor-pointer": interactable },
           className
         )}
         ref={ref}

@@ -33,7 +33,7 @@ const Slideshow = React.forwardRef<HTMLDivElement, SlideshowProps>(
         <Carousel
           plugins={[plugin.current]}
           opts={{ loop: true }}
-          className="border rounded-3xl overflow-hidden">
+          className="border rounded-3xl overflow-hidden hover:cursor-grab active:cursor-grabbing">
           <CarouselContent>
             {images.map((image, index) => (
               <CarouselItem

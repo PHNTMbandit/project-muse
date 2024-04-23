@@ -5,11 +5,7 @@ import Image from "next/image";
 import DOMPurify from "isomorphic-dompurify";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import {
-  getColourPalette,
-  getMetacriticColour,
-  getPrimaryColour,
-} from "@/utils/colour";
+import { getColourPalette, getMetacriticColour } from "@/utils/colour";
 import getPlatformIcon, {
   removeObjectsWithDuplicateStartingString as filterSimilarPlatforms,
 } from "@/utils/platform-icons";
@@ -18,6 +14,7 @@ import { GameScreenshot } from "@/types/screenshot";
 import { Slideshow } from "@/components/slideshow";
 import { formatDate } from "@/utils/date";
 import { LikeButton } from "@/components/like-button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type GameProps = {
   params: {
@@ -37,14 +34,6 @@ export default async function GamePage({ params }: GameProps) {
 
   return (
     <section className="flex flex-col lg:grid grid-cols-6 gap-4">
-      {imageColourPalette.map((palette, index) => (
-        <BentoBox
-          key={index}
-          boxColour={palette}
-          className="whitespace-break-spaces">
-          {`[${index}]\n\n${palette.hex()}`}
-        </BentoBox>
-      ))}{" "}
       <div className="flex flex-col space-y-4 col-span-2">
         <div className="flex gap-4">
           <BentoBox
@@ -94,11 +83,13 @@ export default async function GamePage({ params }: GameProps) {
         <BentoBox
           boxColour={imageColourPalette[0]}
           header="About"
-          className="basis-1/2 flex-none overflow-x-auto">
-          <p
-            className="line-clamp-6"
-            dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
-          />
+          className="basis-1/2">
+          <ScrollArea className="h-32">
+            <p
+              className=""
+              dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+            />
+          </ScrollArea>
         </BentoBox>
         <div className="basis-1/2 grow flex gap-4">
           <BentoBox
@@ -157,6 +148,32 @@ export default async function GamePage({ params }: GameProps) {
           </BentoBox>
         </div>
       </div>
+      <div className="flex flex-wrap col-span-3 gap-4 h-40">
+        <BentoBox
+          boxColour={imageColourPalette[4]}
+          header="Genre"
+          className="grow"></BentoBox>
+        <BentoBox
+          boxColour={imageColourPalette[2]}
+          header="Genre"
+          className="grow"></BentoBox>
+        <BentoBox
+          boxColour={imageColourPalette[0]}
+          header="Genre"
+          className="grow"></BentoBox>
+        <BentoBox
+          boxColour={imageColourPalette[1]}
+          header="Genre"
+          className="grow"></BentoBox>
+      </div>
+      {imageColourPalette.map((palette, index) => (
+        <BentoBox
+          key={index}
+          boxColour={palette}
+          className="whitespace-break-spaces">
+          {`[${index}]\n\n${palette.hex()}`}
+        </BentoBox>
+      ))}
     </section>
   );
 }
