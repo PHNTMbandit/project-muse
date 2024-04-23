@@ -1,9 +1,15 @@
 import Color from "color";
-import { getColorFromURL } from "color-thief-node";
+import { Palette, getColorFromURL, getPaletteFromURL } from "color-thief-node";
 
 export async function getPrimaryColour(imageUrl: string): Promise<Color> {
-  const dominantColor = await getColorFromURL(imageUrl);
+  const dominantColor: Palette = await getColorFromURL(imageUrl);
   return Color.rgb(dominantColor);
+}
+
+export async function getColourPalette(imageUrl: string): Promise<Color[]> {
+  const colorPalette: Palette[] = await getPaletteFromURL(imageUrl);
+  const palette: Color[] = colorPalette.map((colour) => Color.rgb(colour));
+  return palette;
 }
 
 export function getMetacriticColour(score: number): string {

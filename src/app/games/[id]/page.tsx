@@ -5,7 +5,11 @@ import Image from "next/image";
 import DOMPurify from "isomorphic-dompurify";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { getMetacriticColour, getPrimaryColour } from "@/utils/colour";
+import {
+  getColourPalette,
+  getMetacriticColour,
+  getPrimaryColour,
+} from "@/utils/colour";
 import getPlatformIcon, {
   removeObjectsWithDuplicateStartingString as filterSimilarPlatforms,
 } from "@/utils/platform-icons";
@@ -25,7 +29,7 @@ export default async function GamePage({ params }: GameProps) {
   const game: Game = await getGame(params.id);
   const gameMovie: GameMovie[] = await getGameMovies(params.id);
   const gameScreenshots: GameScreenshot[] = await getGameScreenshots(params.id);
-  const imageColour = await getPrimaryColour(game.background_image);
+  const imageColourPalette = await getColourPalette(game.background_image);
   const sanitizedDescription = DOMPurify.sanitize(game.description, {
     USE_PROFILES: { html: false },
   });
@@ -33,12 +37,24 @@ export default async function GamePage({ params }: GameProps) {
 
   return (
     <section className="flex flex-col lg:grid grid-cols-6 gap-4">
-      <div className="flex flex-col space-y-4 col-span-2">
+      {imageColourPalette.map((palette, index) => (
         <BentoBox
-          className="basis-1/5 flex-none flex justify-between gap-4"
-          boxColour={imageColour}>
-          <h3 className="text-3xl">{game.name}</h3>
-          <div className="flex flex-row-reverse flex-wrap items-center gap-2">
+          key={index}
+          boxColour={palette}
+          className="whitespace-break-spaces">
+          {`[${index}]\n\n${palette.hex()}`}
+        </BentoBox>
+      ))}{" "}
+      <div className="flex flex-col space-y-4 col-span-2">
+        <div className="flex gap-4">
+          <BentoBox
+            boxColour={imageColourPalette[3]}
+            className="grow">
+            <h3 className="text-3xl">{game.name}</h3>
+          </BentoBox>
+          <BentoBox
+            boxColour={imageColourPalette[4]}
+            className="flex flex-wrap items-center justify-around gap-2">
             {filteredPlatforms
               .sort((a, b) => b.platform.name.localeCompare(a.platform.name))
               .map((platform, index) => {
@@ -48,15 +64,15 @@ export default async function GamePage({ params }: GameProps) {
                   </div>
                 );
               })}
-          </div>
-        </BentoBox>
+          </BentoBox>
+        </div>
         <BentoBox
           className="basis-1/5 grow"
-          boxColour={imageColour}></BentoBox>
+          boxColour={imageColourPalette[0]}></BentoBox>
         {game.metacritic_platforms.length > 0 && (
           <BentoBox
             className="basis-2/5 flex-none"
-            boxColour={imageColour}
+            boxColour={imageColourPalette[3]}
             header="Metacritic"></BentoBox>
         )}
       </div>
@@ -76,7 +92,7 @@ export default async function GamePage({ params }: GameProps) {
       />
       <div className="flex flex-col space-y-4 col-span-3">
         <BentoBox
-          boxColour={imageColour}
+          boxColour={imageColourPalette[0]}
           header="About"
           className="basis-1/2 flex-none overflow-x-auto">
           <p
@@ -86,7 +102,7 @@ export default async function GamePage({ params }: GameProps) {
         </BentoBox>
         <div className="basis-1/2 grow flex gap-4">
           <BentoBox
-            boxColour={imageColour}
+            boxColour={imageColourPalette[2]}
             header="Reviews"
             className="basis-1/2 flex flex-wrap gap-4">
             {/* {game.metacritic_platforms
@@ -134,7 +150,7 @@ export default async function GamePage({ params }: GameProps) {
             })} */}
           </BentoBox>
           <BentoBox
-            boxColour={imageColour}
+            boxColour={imageColourPalette[3]}
             header="Reviews"
             className="basis-1/2">
             <div className="flex flex-wrap gap-4"></div>
