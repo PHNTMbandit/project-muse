@@ -11,8 +11,8 @@ export default async function LogInLayout({
   const games: Game[] = await getGames("the legend of zelda");
 
   return (
-    <section className="grid grid-cols-10 gap-4 p-4">
-      {games.map((game, index) => (
+    <section className="grid grid-cols-10 gap-4 p-4 w-screen h-screen overflow-hidden">
+      {games.slice(0, 14).map((game, index) => (
         <div
           key={index}
           className="aspect-video relative w-full h-full col-span-2 brightness-50">
