@@ -2,12 +2,27 @@ import type { Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
 const config = {
+  variants: {
+    extend: {
+      display: ["group-hover"],
+    },
+  },
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
+  ],
+  safelist: [
+    "hover:border-accent-blue",
+    "hover:border-accent-purple",
+    "text-accent-blue",
+    "text-accent-purple",
+    "bg-accent-blue",
+    "bg-accent-purple",
+    "stroke-accent-blue",
+    "stroke-accent-purple",
   ],
   prefix: "",
   theme: {
@@ -19,6 +34,16 @@ const config = {
       },
     },
     extend: {
+      dropShadow: {
+        glowPrimary: [
+          "0 0px 3px hsl(var(--primary))",
+          "0 0px 5px hsl(var(--primary))",
+        ],
+        glowForeground: [
+          "0 0px 3px hsl(var(--foreground))",
+          "0 0px 5px hsl(var(--foreground))",
+        ],
+      },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
@@ -47,6 +72,8 @@ const config = {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          purple: "hsl(var(--accent-purple))",
+          blue: "hsl(var(--accent-blue))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -55,6 +82,10 @@ const config = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        button: {
+          DEFAULT: "hsl(var(--button))",
+          foreground: "hsl(var(--button-foreground))",
         },
       },
       borderRadius: {

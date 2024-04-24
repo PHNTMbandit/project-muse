@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
-import { inter } from "../components/ui/fonts";
 import "../styles/globals.css";
+import type { Metadata } from "next";
+import { inter, comfortaa } from "../components/ui/fonts";
 import { ThemeProvider } from "../components/theme-provider";
 
 export const metadata: Metadata = {
@@ -17,13 +17,14 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning>
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${comfortaa.className} antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
           disableTransitionOnChange>
-          {children}
+          <main>
+            <section>{children}</section>
+          </main>
         </ThemeProvider>
       </body>
     </html>
