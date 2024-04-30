@@ -1,5 +1,13 @@
 "use client";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { usePathname } from "next/navigation";
 import * as React from "react";
 import Link from "next/link";
@@ -9,18 +17,12 @@ import { SearchBar } from "./search-bar";
 import { Page } from "@/types/page";
 import { TbHome, TbDeviceGamepad } from "react-icons/tb";
 import { ProfilePicture } from "./profile-picture";
-import { createClient } from "@/utils/supabase/client";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { User } from "@supabase/auth-js/dist/module/lib/types";
+import { FiLogIn } from "react-icons/fi";
 
 type HeaderProps = {
   className?: string;
+  user: User | null;
 };
 
 const pages: Page[] = [
@@ -33,11 +35,11 @@ const pages: Page[] = [
   },
 ];
 
-function Header({ className }: HeaderProps) {
+function Header({ className, user }: HeaderProps) {
   const pathname = usePathname();
 
   return (
-    <div className={cn("flex items-center mb-16", className)}>
+    <div className={cn("flex items-center mb-8", className)}>
       <h1 className="basis-1/3">Muse</h1>
       <nav className="basis-1/3 flex justify-center gap-8">
         {pages.map((page, index) => (
@@ -45,9 +47,9 @@ function Header({ className }: HeaderProps) {
             key={index}
             href={page.url}>
             <Button
-              variant={"ghost"}
+              variant={"icon"}
               className={cn(
-                `hover:border-${page.color} space-x-2`,
+                `hover:border-${page.color}`,
                 pathname.includes(page.url) && `bg-${page.color}`
               )}>
               <page.icon
@@ -56,32 +58,46 @@ function Header({ className }: HeaderProps) {
                   pathname.includes(page.url) && `stroke-primary`
                 )}
               />
-              <h2
+              <p
                 className={cn(
-                  `text-${page.color} hidden lg:block`,
+                  `text-${page.color}`,
                   pathname.includes(page.url) && "text-primary"
                 )}>
                 {page.label}
-              </h2>
+              </p>
             </Button>
           </Link>
         ))}
       </nav>
       <div className="basis-1/3 flex justify-end gap-4">
         <SearchBar placeholder={"Search games"} />
-        <DropdownMenu>
-          <DropdownMenuTrigger className="focus:outline-none">
-            <ProfilePicture />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel></DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {user ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger className="focus:outline-none">
+              <ProfilePicture />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>
+                {user?.user_metadata["username"]}
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <form
+                  action={"/auth/signout"}
+                  method="post">
+                  <Button variant={"ghost"}>Sign Out</Button>
+                </form>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Link href={"/log-in"}>
+            <Button variant={"icon"}>
+              <FiLogIn />
+              <p>Log In</p>
+            </Button>
+          </Link>
+        )}
       </div>
     </div>
   );

@@ -25,33 +25,33 @@ const Slideshow = React.forwardRef<HTMLDivElement, SlideshowProps>(
       })
     );
     return (
-      <div
-        className={cn("", className)}
+      <Carousel
+        className={cn(
+          "border rounded-3xl overflow-hidden hover:cursor-grab active:cursor-grabbing",
+          className
+        )}
+        plugins={[plugin.current]}
+        opts={{ loop: true }}
         ref={ref}
         {...props}>
         {children}
-        <Carousel
-          plugins={[plugin.current]}
-          opts={{ loop: true }}
-          className="border rounded-3xl overflow-hidden hover:cursor-grab active:cursor-grabbing">
-          <CarouselContent>
-            {images.map((image, index) => (
-              <CarouselItem
-                key={index}
-                className="aspect-video relative pl-4">
-                <Image
-                  src={image}
-                  alt={"Slideshow Image"}
-                  fill
-                  priority
-                  sizes="1"
-                  className="object-cover shadow shadow-transparent"
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-      </div>
+        <CarouselContent>
+          {images.map((image, index) => (
+            <CarouselItem
+              key={index}
+              className="aspect-video relative pl-4">
+              <Image
+                src={image}
+                alt={"Slideshow Image"}
+                fill
+                priority
+                sizes="1"
+                className="object-cover shadow shadow-transparent"
+              />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
     );
   }
 );

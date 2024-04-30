@@ -19,9 +19,10 @@ export async function signup(formData: SignUpFormData) {
   });
 
   if (error) {
+    console.error(error.message);
     redirect("/error");
   }
 
   revalidatePath("/", "layout");
-  redirect("/dashboard");
+  redirect("/discover");
 }

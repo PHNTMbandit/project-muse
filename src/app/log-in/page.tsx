@@ -18,11 +18,12 @@ import { LogInFormData } from "@/types/form-data";
 import { useState } from "react";
 import Link from "next/link";
 import { BentoBox } from "@/components/bento-box";
-import { FaUser, FaLock } from "react-icons/fa";
+import { FaLock } from "react-icons/fa";
 import { Logo } from "@/components/logo";
+import { MdAlternateEmail } from "react-icons/md";
 
 const logInFormSchema = z.object({
-  username: z.string().min(1, { message: "Username is required" }),
+  email: z.string().min(1, { message: "Email is required" }).email(),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters" }),
@@ -34,7 +35,7 @@ export default function LogInPage() {
   const form = useForm<LogInFormData>({
     resolver: zodResolver(logInFormSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
@@ -57,14 +58,14 @@ export default function LogInPage() {
             className="space-y-4">
             <FormField
               control={form.control}
-              name="username"
+              name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Input
-                      icon={FaUser}
-                      type={"username"}
-                      placeholder="Username"
+                      icon={MdAlternateEmail}
+                      type={"email"}
+                      placeholder="Email"
                       required
                       {...field}
                     />
