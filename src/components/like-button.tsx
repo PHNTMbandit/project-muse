@@ -18,9 +18,9 @@ export interface LikeButtonProps
 
 const LikeButton = React.forwardRef<HTMLButtonElement, LikeButtonProps>(
   ({ game, user, className, children, ...props }, ref) => {
+    const { toast } = useToast();
     const supabase = createClient();
     const [isLike, setIsLike] = React.useState(false);
-    const { toast } = useToast();
 
     React.useEffect(() => {
       const fetchLike = async () => {
@@ -32,6 +32,8 @@ const LikeButton = React.forwardRef<HTMLButtonElement, LikeButtonProps>(
           .then((data) => {
             if (data.data && data.data?.length > 0) {
               setIsLike(true);
+            } else {
+              setIsLike(false);
             }
           });
       };
@@ -40,18 +42,18 @@ const LikeButton = React.forwardRef<HTMLButtonElement, LikeButtonProps>(
     }, [game.id, isLike, setIsLike, supabase, user?.id]);
 
     async function onClick(e: React.MouseEvent<HTMLButtonElement>) {
-      setIsLike(!isLike);
-
       if (!isLike) {
         await supabase
           .from("likes")
-          .insert({ game_id: game.id, user_id: user?.id });
+          .insert({ game_id: game.id, user_id: user?.id })
+          .then((result) => setIsLike(true));
       } else {
         await supabase
           .from("likes")
           .delete()
           .eq("user_id", user?.id)
-          .eq("game_id", game.id);
+          .eq("game_id", game.id)
+          .then((result) => setIsLike(false));
       }
 
       toast({
