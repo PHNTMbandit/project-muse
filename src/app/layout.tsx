@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import type { Metadata } from "next";
 import { inter, comfortaa } from "../components/ui/fonts";
 import { ThemeProvider } from "../components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,6 +26,7 @@ export default function RootLayout({
           <main>
             <section>{children}</section>
           </main>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

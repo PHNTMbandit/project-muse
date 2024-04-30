@@ -15,6 +15,7 @@ import { Slideshow } from "@/components/slideshow";
 import { formatDate } from "@/utils/date";
 import { LikeButton } from "@/components/like-button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { createClient } from "@/utils/supabase/server";
 
 type GameProps = {
   params: {
@@ -31,41 +32,30 @@ export default async function GamePage({ params }: GameProps) {
     USE_PROFILES: { html: false },
   });
   const filteredPlatforms = filterSimilarPlatforms(game.platforms);
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
-    <section className="flex flex-col lg:grid grid-cols-6 gap-4">
-      <div className="flex flex-col space-y-4 col-span-2">
-        <div className="flex gap-4">
-          <BentoBox
-            boxColour={imageColourPalette[3]}
-            className="grow">
-            <h3 className="text-3xl">{game.name}</h3>
-          </BentoBox>
-          <BentoBox
-            boxColour={imageColourPalette[4]}
-            className="flex flex-wrap items-center justify-around gap-2">
-            {filteredPlatforms
-              .sort((a, b) => b.platform.name.localeCompare(a.platform.name))
-              .map((platform, index) => {
-                return (
-                  <div key={index}>
-                    {getPlatformIcon(platform.platform.name)}
-                  </div>
-                );
-              })}
-          </BentoBox>
-        </div>
-        <BentoBox
-          className="basis-1/5 grow"
-          boxColour={imageColourPalette[0]}></BentoBox>
-        {game.metacritic_platforms.length > 0 && (
-          <BentoBox
-            className="basis-2/5 flex-none"
-            boxColour={imageColourPalette[3]}
-            header="Metacritic"></BentoBox>
-        )}
-      </div>
-      <div className="aspect-video relative w-full h-full col-span-4">
+    <section className="flex flex-col lg:grid grid-rows-12 grid-cols-12 gap-4">
+      <BentoBox
+        boxColour={imageColourPalette[4]}
+        className="col-span-4 flex items-center">
+        <h3 className="text-3xl">{game.name}</h3>
+      </BentoBox>
+      {/* <BentoBox
+        boxColour={imageColourPalette[4]}
+        className="flex flex-wrap items-center justify-center gap-2">
+        {filteredPlatforms
+          .sort((a, b) => b.platform.name.localeCompare(a.platform.name))
+          .map((platform, index) => {
+            return (
+              <div key={index}>{getPlatformIcon(platform.platform.name)}</div>
+            );
+          })}
+      </BentoBox> */}
+      <div className="aspect-video relative w-full h-full col-start-5 col-span-8 row-span-6">
         <Image
           src={game.background_image}
           alt={"Background Image"}
@@ -75,103 +65,40 @@ export default async function GamePage({ params }: GameProps) {
           className="object-cover rounded-3xl shadow shadow-transparent"
         />
       </div>
+      <BentoBox
+        className="col-span-4 row-span-3 row-start-2"
+        boxColour={imageColourPalette[0]}></BentoBox>
+      <BentoBox
+        className="col-span-4 row-span-2 row-start-5"
+        boxColour={imageColourPalette[3]}>
+        <LikeButton
+          game={game}
+          user={user}
+          className=" scale-125"
+        />
+      </BentoBox>
       <Slideshow
-        className="col-span-3 "
+        className="col-span-7 row-span-5"
         images={gameScreenshots.map((screenshot) => screenshot.image)}
       />
-      <div className="flex flex-col space-y-4 col-span-3">
-        <BentoBox
-          boxColour={imageColourPalette[0]}
-          header="About"
-          className="basis-1/2">
-          <ScrollArea className="h-32">
-            <p
-              className=""
-              dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
-            />
-          </ScrollArea>
-        </BentoBox>
-        <div className="basis-1/2 grow flex gap-4">
-          <BentoBox
-            boxColour={imageColourPalette[2]}
-            header="Reviews"
-            className="basis-1/2 flex flex-wrap gap-4">
-            {/* {game.metacritic_platforms
-              .sort((a, b) =>
-                b.metascore.toString().localeCompare(a.metascore.toString())
-              )
-              .map((metacriticPlatform, index) => {
-                const metacriticColour = getMetacriticColour(
-                  metacriticPlatform.metascore
-                );
-                return (
-                  <Link
-                    key={index}
-                    href={metacriticPlatform.url}
-                    target={"_blank"}>
-                    <Button
-                      className="align-bottom gap-3"
-                      style={{ backgroundColor: `#${metacriticColour}` }}>
-                      {getPlatformIcon(metacriticPlatform.url)}
-                      <p className="group-hover:text-background font-extrabold text-xl">
-                        {metacriticPlatform.metascore}
-                      </p>
-                    </Button>
-                  </Link>
-                );
-              })} */}
-            {/* {game.platforms
-            .sort((a, b) => a.platform.name.localeCompare(b.platform.name))
-            .map((platform, index) => {
-              const platformIcon = getPlatformIcon(platform.platform.name);
-              const formattedDate = formatDate(platform.released_at);
-              console.log(platform.released_at);
-
-              return (
-                <div
-                  key={index}
-                  className="flex gap-4 justify-between">
-                  <div className="flex gap-2">
-                    {platformIcon}
-                    <p>{platform.platform.name}</p>
-                  </div>
-                  <p>{formattedDate}</p>
-                </div>
-              );
-            })} */}
-          </BentoBox>
-          <BentoBox
-            boxColour={imageColourPalette[3]}
-            header="Reviews"
-            className="basis-1/2">
-            <div className="flex flex-wrap gap-4"></div>
-          </BentoBox>
-        </div>
-      </div>
-      <div className="flex flex-wrap col-span-3 gap-4 h-40">
-        <BentoBox
-          boxColour={imageColourPalette[4]}
-          header="Genre"
-          className="grow"></BentoBox>
-        <BentoBox
-          boxColour={imageColourPalette[2]}
-          header="Genre"
-          className="grow"></BentoBox>
-        <BentoBox
-          boxColour={imageColourPalette[0]}
-          header="Genre"
-          className="grow"></BentoBox>
-        <BentoBox
-          boxColour={imageColourPalette[1]}
-          header="Genre"
-          className="grow"></BentoBox>
-      </div>
+      <BentoBox
+        boxColour={imageColourPalette[0]}
+        header="About"
+        className="col-span-5 col-start-8 row-span-4">
+        <ScrollArea className="h-32">
+          <p dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
+        </ScrollArea>
+      </BentoBox>
+      <BentoBox
+        boxColour={imageColourPalette[2]}
+        header="Reviews"
+        className="col-span-5 col-start-8"></BentoBox>
       {imageColourPalette.map((palette, index) => (
         <BentoBox
           key={index}
           boxColour={palette}
-          className="whitespace-break-spaces">
-          {`[${index}]\n\n${palette.hex()}`}
+          className="whitespace-break-spaces col-span-2">
+          {`[${index}]\n${palette.hex()}`}
         </BentoBox>
       ))}
     </section>

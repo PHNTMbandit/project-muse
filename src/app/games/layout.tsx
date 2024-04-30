@@ -2,7 +2,7 @@ import { Header } from "@/components/header";
 import { createClient } from "@/utils/supabase/server";
 import React from "react";
 
-export default async function DiscoverLayout({
+export default async function GamePageLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

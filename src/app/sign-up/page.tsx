@@ -52,6 +52,7 @@ export default function SignUpPage() {
       email: "",
       username: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
@@ -81,9 +82,29 @@ export default function SignUpPage() {
                     <FormItem>
                       <FormControl>
                         <Input
+                          autoComplete="true"
                           icon={FaUser}
                           type={"username"}
                           placeholder="Username"
+                          required
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          autoComplete="true"
+                          icon={MdAlternateEmail}
+                          type={"email"}
+                          placeholder="Email"
                           required
                           {...field}
                         />
@@ -99,6 +120,7 @@ export default function SignUpPage() {
                     <FormItem>
                       <FormControl>
                         <Input
+                          autoComplete="true"
                           icon={FaLock}
                           type={"password"}
                           placeholder="Password"
@@ -117,6 +139,7 @@ export default function SignUpPage() {
                     <FormItem>
                       <FormControl>
                         <Input
+                          autoComplete="true"
                           icon={FaLock}
                           type={"password"}
                           placeholder="Confirm Password"

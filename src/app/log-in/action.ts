@@ -8,12 +8,16 @@ import { LogInFormData } from "@/types/form-data";
 export async function login(formData: LogInFormData) {
   const supabase = createClient();
 
-  const { error } = await supabase.auth.signInWithPassword(formData);
+  const { error } = await supabase.auth.signInWithPassword({
+    email: formData.email,
+    password: formData.password,
+  });
 
   if (error) {
+    console.error(error);
     redirect("/error");
   }
 
   revalidatePath("/", "layout");
-  redirect("/dashboard");
+  redirect("/discover");
 }

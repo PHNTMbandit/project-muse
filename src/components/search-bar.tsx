@@ -47,16 +47,16 @@ const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
         {children}
         <Button
           onClick={() => setOpen(!open)}
-          variant={"outline"}
-          className="space-x-2">
+          variant={"icon"}>
           <TbSearch />
-          <h2 className="hidden lg:block">Search games</h2>
+          <p className="hidden lg:block">Search games</p>
         </Button>
         <CommandDialog
           open={open}
           onOpenChange={setOpen}>
           <div className="space-y-2">
             <Input
+              icon={TbSearch}
               onChange={handleChange}
               placeholder="Search for a game..."
             />
