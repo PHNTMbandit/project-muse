@@ -21,6 +21,7 @@ const LikeButton = React.forwardRef<HTMLButtonElement, LikeButtonProps>(
     const { toast } = useToast();
     const supabase = createClient();
     const [isLike, setIsLike] = React.useState(false);
+    const [likes, setLikes] = React.useState(0);
 
     React.useEffect(() => {
       const fetchLike = async () => {
@@ -29,8 +30,8 @@ const LikeButton = React.forwardRef<HTMLButtonElement, LikeButtonProps>(
           .select("id")
           .eq("user_id", user?.id)
           .eq("game_id", game.id)
-          .then((data) => {
-            if (data.data && data.data?.length > 0) {
+          .then((response) => {
+            if (response.data && response.data?.length > 0) {
               setIsLike(true);
             } else {
               setIsLike(false);
@@ -38,8 +39,21 @@ const LikeButton = React.forwardRef<HTMLButtonElement, LikeButtonProps>(
           });
       };
 
+      const fetchLikes = async () => {
+        await supabase
+          .from("likes")
+          .select()
+          .eq("game_id", game.id)
+          .then((response) => {
+            if (response.data) {
+              setLikes(response.data?.length);
+            }
+          });
+      };
+
       fetchLike();
-    }, [game.id, isLike, setIsLike, supabase, user?.id]);
+      fetchLikes();
+    }, [game.id, likes, setLikes, isLike, setIsLike, supabase, user?.id]);
 
     async function onClick(e: React.MouseEvent<HTMLButtonElement>) {
       if (!isLike) {
@@ -77,6 +91,7 @@ const LikeButton = React.forwardRef<HTMLButtonElement, LikeButtonProps>(
         ) : (
           <PiHeartStraightLight className="" />
         )}
+        {likes}
       </Button>
     );
   }
