@@ -27,7 +27,7 @@ const Slideshow = React.forwardRef<HTMLDivElement, SlideshowProps>(
     return (
       <Carousel
         className={cn(
-          "border rounded-3xl overflow-hidden hover:cursor-grab active:cursor-grabbing",
+          "rounded-3xl overflow-hidden hover:cursor-grab active:cursor-grabbing",
           className
         )}
         plugins={[plugin.current]}

@@ -16,7 +16,7 @@ import { signup } from "./action";
 import { SignUpFormData } from "@/types/form-data";
 import { FaUser, FaLock } from "react-icons/fa";
 import { MdAlternateEmail } from "react-icons/md";
-import { BentoBox } from "@/components/bento-box";
+import { BentoBox } from "@/components/ui/bento-box";
 import { RxReload } from "react-icons/rx";
 import { useState } from "react";
 import Link from "next/link";
