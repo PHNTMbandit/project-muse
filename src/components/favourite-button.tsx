@@ -13,7 +13,7 @@ import { User } from "@supabase/supabase-js";
 export interface FavouriteButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   game: Game;
-  user: User | null;
+  user: User;
 }
 
 const FavouriteButton = React.forwardRef<
@@ -23,6 +23,7 @@ const FavouriteButton = React.forwardRef<
   const { toast } = useToast();
   const supabase = createClient();
   const [isFavourited, setIsFavourited] = React.useState(false);
+  const [favourites, setFavourites] = React.useState(0);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -38,10 +39,28 @@ const FavouriteButton = React.forwardRef<
             setIsFavourited(false);
           }
         });
+
+      await supabase
+        .from("favourites")
+        .select("id")
+        .eq("game_id", game.id)
+        .then((response) => {
+          if (response.data) {
+            setFavourites(response.data.length);
+          }
+        });
     };
 
     fetchData();
-  }, [game.id, isFavourited, setIsFavourited, supabase, user?.id]);
+  }, [
+    game.id,
+    isFavourited,
+    setIsFavourited,
+    favourites,
+    setFavourites,
+    supabase,
+    user?.id,
+  ]);
 
   async function onClick(e: React.MouseEvent<HTMLButtonElement>) {
     if (!isFavourited) {
@@ -67,13 +86,15 @@ const FavouriteButton = React.forwardRef<
 
   return (
     <Button
-      className={cn("", className)}
+      className={cn("flex gap-2 items-center", className)}
       size={"icon"}
       ref={ref}
+      variant={"outline"}
       {...props}
       onClick={onClick}>
       {children}
       {isFavourited ? <PiStarFill /> : <PiStarBold />}
+      {favourites}
     </Button>
   );
 });

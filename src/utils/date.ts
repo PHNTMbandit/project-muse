@@ -22,7 +22,7 @@ export function formatDate(dateString: string): string {
   }
 }
 
-export function getOrdinalSuffix(day: number): string {
+function getOrdinalSuffix(day: number): string {
   if (day >= 11 && day <= 13) {
     return "th";
   }

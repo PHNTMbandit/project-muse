@@ -8,7 +8,7 @@ export default async function LogInLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const games: Game[] = await getGames("the legend of zelda");
+  const games: Game[] = await getGames({ searchText: "the legend of zelda" });
 
   return (
     <section className="grid grid-cols-10 gap-4 p-4 w-screen h-screen overflow-hidden">

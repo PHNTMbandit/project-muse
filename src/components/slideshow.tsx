@@ -27,7 +27,7 @@ const Slideshow = React.forwardRef<HTMLDivElement, SlideshowProps>(
     return (
       <Carousel
         className={cn(
-          "rounded-3xl overflow-hidden hover:cursor-grab active:cursor-grabbing",
+          "rounded-3xl h-full w-full hover:cursor-grab active:cursor-grabbing overflow-hidden",
           className
         )}
         plugins={[plugin.current]}
@@ -39,14 +39,14 @@ const Slideshow = React.forwardRef<HTMLDivElement, SlideshowProps>(
           {images.map((image, index) => (
             <CarouselItem
               key={index}
-              className="aspect-video relative pl-4">
+              className="relative aspect-video w-full">
               <Image
                 src={image}
                 alt={"Slideshow Image"}
-                fill
                 priority
+                fill
                 sizes="1"
-                className="object-cover shadow shadow-transparent"
+                className="object-cover"
               />
             </CarouselItem>
           ))}

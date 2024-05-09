@@ -85,7 +85,7 @@ function Header({ className, user }: HeaderProps) {
                 <form
                   action={"/auth/signout"}
                   method="post">
-                  <Button variant={"ghost"}>Sign Out</Button>
+                  <button>Sign Out</button>
                 </form>
               </DropdownMenuItem>
             </DropdownMenuContent>

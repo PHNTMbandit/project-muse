@@ -18,7 +18,7 @@ const GameDescriptionBox = React.forwardRef<
       ref={ref}
       {...props}>
       {children}
-      <ScrollArea className="h-32">
+      <ScrollArea className="h-72">
         <p dangerouslySetInnerHTML={{ __html: description }} />
       </ScrollArea>
     </BentoBox>

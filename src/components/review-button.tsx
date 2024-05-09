@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Input } from "./ui/input";
 import { cn } from "@/lib/utils";
 import { User } from "@supabase/supabase-js";
 import { Game } from "@/types/game";
@@ -35,11 +34,15 @@ import {
   FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { TbPencilStar } from "react-icons/tb";
 import { Slider } from "@/components/ui/slider";
+import { useToast } from "./ui/use-toast";
+import { AverageStarRating } from "./average-star-rating";
+import { Textarea } from "./ui/textarea";
+import { Tables } from "@/types/supabase";
+import { useRouter } from "next/navigation";
 
 export interface ReviewButtonProps
   extends React.AnchorHTMLAttributes<HTMLDivElement> {
@@ -51,32 +54,68 @@ const ReviewButton = React.forwardRef<HTMLDivElement, ReviewButtonProps>(
   ({ game, user, className, children, ...props }, ref) => {
     const supabase = createClient();
     const [open, setOpen] = React.useState(false);
+    const [savedReview, setSavedReview] =
+      React.useState<Tables<"reviews"> | null>(null);
+    const { toast } = useToast();
+    const router = useRouter();
     const isDesktop = useMediaQuery("(min-width: 768px)");
     const formSchema = z.object({
-      text: z.string().min(2).max(1000),
-      rating: z.number().min(1).max(5).default(1),
+      text: z
+        .string()
+        .min(2)
+        .max(1000, { message: "Review cannot be longer than 1000 characters" }),
+      rating: z.number().min(0.5).max(5),
     });
+
+    React.useEffect(() => {
+      const getSavedReview = async () => {
+        if (user) {
+          const review = await supabase
+            .from("reviews")
+            .select()
+            .eq("reviewer_id", user?.id)
+            .single();
+          setSavedReview(review.data);
+        }
+      };
+      getSavedReview();
+    }, [supabase, user?.id, open, user]);
 
     function ReviewForm() {
       const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-          text: "",
-          rating: 1,
+          text: savedReview?.text,
+          rating: savedReview?.rating,
         },
       });
 
       async function onSubmit(values: z.infer<typeof formSchema>) {
         if (user) {
-          await supabase.from("reviews").insert({
-            game_id: game.id,
-            reviewer_id: user?.id,
-            text: values.text,
-            rating: values.rating,
+          if (savedReview) {
+            await supabase
+              .from("reviews")
+              .update({
+                text: values.text,
+                rating: values.rating,
+              })
+              .eq("reviewer_id", user?.id);
+          } else {
+            await supabase.from("reviews").insert({
+              game_id: game.id,
+              reviewer_id: user?.id,
+              text: values.text,
+              rating: values.rating,
+            });
+          }
+
+          toast({
+            title: "Review saved",
           });
         }
 
         setOpen(false);
+        router.refresh();
       }
 
       return (
@@ -89,14 +128,18 @@ const ReviewButton = React.forwardRef<HTMLDivElement, ReviewButtonProps>(
               name="text"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Review</FormLabel>
                   <FormControl>
-                    <Input
-                      icon={TbPencilStar}
+                    <Textarea
+                      className="h-80"
                       placeholder="Write your review here..."
                       {...field}
                     />
                   </FormControl>
+                  {field.value.length > 1000 ? (
+                    <p className="text-red-500">{field.value.length}/1000</p>
+                  ) : (
+                    <p>{field.value.length}/1000</p>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
@@ -106,12 +149,11 @@ const ReviewButton = React.forwardRef<HTMLDivElement, ReviewButtonProps>(
               name="rating"
               render={({ field: { value, onChange } }) => (
                 <FormItem>
-                  <FormLabel>Rating</FormLabel>
                   <FormControl>
                     <Slider
-                      min={1}
+                      min={0.5}
                       max={5}
-                      step={1}
+                      step={0.5}
                       defaultValue={[value]}
                       onValueChange={(vals: Number[]) => {
                         onChange(vals[0]);
@@ -119,7 +161,9 @@ const ReviewButton = React.forwardRef<HTMLDivElement, ReviewButtonProps>(
                       value={[form.getValues("rating")]}
                     />
                   </FormControl>
-                  <FormDescription>{[value]}</FormDescription>
+                  <FormDescription>
+                    <AverageStarRating averageRating={value} />
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -136,19 +180,22 @@ const ReviewButton = React.forwardRef<HTMLDivElement, ReviewButtonProps>(
           open={open}
           onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button variant="outline">
-              <TbPencilStar />
+            <Button
+              size={"icon"}
+              variant="outline"
+              disabled={!user}>
+              <TbPencilStar size={20} />
             </Button>
           </DialogTrigger>
           <DialogContent
             className={cn("sm:max-w-[425px]", className)}
-            ref={ref}
             {...props}>
             <DialogHeader>
-              <DialogTitle>Edit profile</DialogTitle>
+              <DialogTitle>
+                {user?.user_metadata["username"]}&apos;s review
+              </DialogTitle>
               <DialogDescription>
-                Make changes to your profile here. Click save when you&apos;re
-                done.
+                Let the people know what you think of {game.name}!
               </DialogDescription>
             </DialogHeader>
             <ReviewForm />
@@ -162,16 +209,18 @@ const ReviewButton = React.forwardRef<HTMLDivElement, ReviewButtonProps>(
         open={open}
         onOpenChange={setOpen}>
         <DrawerTrigger asChild>
-          <Button variant="outline">
-            <TbPencilStar />
+          <Button
+            size={"icon"}
+            variant="outline"
+            disabled={!user}>
+            <TbPencilStar size={20} />
           </Button>
         </DrawerTrigger>
         <DrawerContent className={cn("sm:max-w-[425px]", className)}>
           <DrawerHeader className="text-left">
-            <DrawerTitle>Edit profile</DrawerTitle>
+            <DrawerTitle>Your review</DrawerTitle>
             <DrawerDescription>
-              Make changes to your profile here. Click save when you&apos;re
-              done.
+              Let the people know what you think of {game.name}!
             </DrawerDescription>
           </DrawerHeader>
           <ReviewForm />

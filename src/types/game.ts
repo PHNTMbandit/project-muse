@@ -11,7 +11,17 @@ export type Game = {
   esrb_rating: { id: number; slug: string; name: string };
   game_series_count: number;
   id: number;
-  metacritic_platforms: [{ metascore: number; url: string }];
+  metacritic_platforms: [
+    {
+      metascore: number;
+      url: string;
+      platform: {
+        platform: number;
+        name: string;
+        slug: string;
+      };
+    }
+  ];
   metacritic_url: string;
   metacritic: number;
   movies_count: number;
@@ -35,7 +45,7 @@ export type Game = {
   reddit_count: number;
   reddit_description: string;
   reddit_logo: string;
-  reddit_url: number;
+  reddit_url: string;
   released: string;
   reviews_text_count: string;
   screenshots_count: number;

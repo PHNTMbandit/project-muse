@@ -55,13 +55,16 @@
 
 @layer components {
   .glassmorphism {
-    @apply rounded-xl bg-white/20 backdrop-blur-lg shadow-lg ring-1 ring-black/5;
+    @apply rounded-xl bg-transparent/10 backdrop-blur shadow-lg ring-1 ring-black/5;
   }
 }
 
 @layer base {
   * {
     @apply border-border;
+  }
+  html {
+    @apply scroll-smooth;
   }
   body {
     @apply bg-background text-foreground scroll-m-20;
@@ -74,6 +77,15 @@
   }
   h3 {
     @apply text-xl font-semibold;
+  }
+  h4 {
+    @apply text-base font-semibold;
+  }
+  h5 {
+    @apply text-xl font-semibold;
+  }
+  h6 {
+    @apply text-sm font-extrabold;
   }
   p {
     @apply text-sm tracking-tight font-light;

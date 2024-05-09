@@ -12,13 +12,13 @@ export async function getColourPalette(imageUrl: string): Promise<Color[]> {
   return palette;
 }
 
-export function getMetacriticColour(score: number): string {
+export function getMetacriticColour(score: number): Color {
   if (score >= 75) {
-    return "48b80f";
+    return Color.rgb("#48b80f");
   } else if (score >= 50 && score <= 74) {
-    return "ffb300";
+    return Color.rgb("#ffb300");
   } else {
-    return "ff2929";
+    return Color.rgb("#ff2929");
   }
 }
 
