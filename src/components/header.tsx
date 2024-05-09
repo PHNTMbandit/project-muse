@@ -39,7 +39,7 @@ function Header({ className, user }: HeaderProps) {
   const pathname = usePathname();
 
   return (
-    <div className={cn("flex items-center mb-8", className)}>
+    <section className={cn("flex items-center mb-8", className)}>
       <h1 className="basis-1/3">Muse</h1>
       <nav className="basis-1/3 flex justify-center gap-8">
         {pages.map((page, index) => (
@@ -99,7 +99,7 @@ function Header({ className, user }: HeaderProps) {
           </Link>
         )}
       </div>
-    </div>
+    </section>
   );
 }
 

@@ -176,7 +176,6 @@ export default function SignUpPage() {
               </form>
             </Form>
           </BentoBox>
-          <BentoBox className="bg-accent-blue basis-1/5"></BentoBox>
         </div>
       </div>
     </section>
