@@ -13,7 +13,7 @@ import { User } from "@supabase/supabase-js";
 export interface LikeButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   game: Game;
-  user: User | null;
+  user: User;
 }
 
 const LikeButton = React.forwardRef<HTMLButtonElement, LikeButtonProps>(
@@ -28,7 +28,7 @@ const LikeButton = React.forwardRef<HTMLButtonElement, LikeButtonProps>(
         await supabase
           .from("likes")
           .select("id")
-          .eq("user_id", user?.id)
+          .eq("user_id", user.id)
           .eq("game_id", game.id)
           .then((response) => {
             if (response.data && response.data?.length > 0) {

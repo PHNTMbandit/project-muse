@@ -13,7 +13,7 @@ import { User } from "@supabase/supabase-js";
 export interface FavouriteButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   game: Game;
-  user: User | null;
+  user: User;
 }
 
 const FavouriteButton = React.forwardRef<

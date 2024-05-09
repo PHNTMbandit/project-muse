@@ -28,7 +28,7 @@ const GameMetacriticBox = React.forwardRef<
       ref={ref}
       {...props}>
       {children}
-      {metacriticPlatforms ? (
+      {metacriticPlatforms.length > 0 ? (
         <div className="flex flex-wrap gap-2">
           {metacriticPlatforms
             .sort((a, b) => a.platform.name.localeCompare(b.platform.name))

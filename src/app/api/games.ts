@@ -46,7 +46,8 @@ export const getGame = async (id: string): Promise<Game> => {
 export const getGamesByGenre = async (genre: Genre): Promise<Game[]> => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_RAWG_URL}/games?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}&genres=${genre.id}`
+      `${process.env.NEXT_PUBLIC_RAWG_URL}/games?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}&genres=${genre.id}`,
+      { headers: { Accept: "application/json" } }
     );
     const result = await response.json();
     const data = result.results;
@@ -60,7 +61,8 @@ export const getGamesByGenre = async (genre: Genre): Promise<Game[]> => {
 export const getGameMovies = async (id: string): Promise<GameMovie[]> => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_RAWG_URL}/games/${id}/movies?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}`
+      `${process.env.NEXT_PUBLIC_RAWG_URL}/games/${id}/movies?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}`,
+      { headers: { Accept: "application/json" } }
     );
     const result = await response.json();
     return result.results;
@@ -75,7 +77,8 @@ export const getGameScreenshots = async (
 ): Promise<GameScreenshot[]> => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_RAWG_URL}/games/${game_pk}/screenshots?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}`
+      `${process.env.NEXT_PUBLIC_RAWG_URL}/games/${game_pk}/screenshots?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}`,
+      { headers: { Accept: "application/json" } }
     );
     const result = await response.json();
     return result.results;

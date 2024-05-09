@@ -69,15 +69,17 @@ const ReviewButton = React.forwardRef<HTMLDivElement, ReviewButtonProps>(
 
     React.useEffect(() => {
       const getSavedReview = async () => {
-        const review = await supabase
-          .from("reviews")
-          .select()
-          .eq("reviewer_id", user?.id)
-          .single();
-        setSavedReview(review.data);
+        if (user) {
+          const review = await supabase
+            .from("reviews")
+            .select()
+            .eq("reviewer_id", user?.id)
+            .single();
+          setSavedReview(review.data);
+        }
       };
       getSavedReview();
-    }, [supabase, user?.id, open]);
+    }, [supabase, user?.id, open, user]);
 
     function ReviewForm() {
       const form = useForm<z.infer<typeof formSchema>>({

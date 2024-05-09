@@ -11,14 +11,18 @@ export async function getReview(
 ): Promise<Tables<"reviews"> | null> {
   const supabase = createClient();
 
-  const reviewData = await supabase
-    .from("reviews")
-    .select()
-    .eq("game_id", game.id)
-    .eq("reviewer_id", user?.id)
-    .single();
+  if (user) {
+    const reviewData = await supabase
+      .from("reviews")
+      .select()
+      .eq("game_id", game.id)
+      .eq("reviewer_id", user.id)
+      .single();
 
-  return reviewData.data;
+    return reviewData.data;
+  } else {
+    return null;
+  }
 }
 
 export async function getReviews(
@@ -35,15 +39,19 @@ export async function getReviews(
 }
 
 export async function getReviewAuthor(
-  reviewAuthorId: Tables<"reviews">["reviewer_id"]
+  reviewAuthorId: Tables<"reviews">["reviewer_id"] | undefined
 ): Promise<Tables<"profiles"> | null> {
   const supabase = createClient();
 
-  const reviewData = await supabase
-    .from("profiles")
-    .select()
-    .eq("id", reviewAuthorId)
-    .single();
+  if (reviewAuthorId) {
+    const reviewData = await supabase
+      .from("profiles")
+      .select()
+      .eq("id", reviewAuthorId)
+      .single();
 
-  return reviewData.data;
+    return reviewData.data;
+  } else {
+    return null;
+  }
 }
