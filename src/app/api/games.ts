@@ -1,11 +1,23 @@
 import { Game } from "@/types/game";
+import { Genre } from "@/types/genre";
 import { GameMovie } from "@/types/movies";
 import { GameScreenshot } from "@/types/screenshot";
 
-export const getGames = async (searchText: string): Promise<Game[]> => {
+export interface GameQueryProps {
+  ordering?: string;
+  searchText?: string;
+  size?: number;
+}
+
+export const getGames = async ({
+  ordering,
+  searchText,
+  size,
+}: GameQueryProps): Promise<Game[]> => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_RAWG_URL}/games?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}&search=${searchText}&search_precise=true`
+      `${process.env.NEXT_PUBLIC_RAWG_URL}/games?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}&search=${searchText}&search_precise=true&ordering=${ordering}&page_size=${size}`,
+      { headers: { Accept: "application/json" } }
     );
 
     const result = await response.json();
@@ -20,10 +32,25 @@ export const getGames = async (searchText: string): Promise<Game[]> => {
 export const getGame = async (id: string): Promise<Game> => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_RAWG_URL}/games/${id}?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}`
+      `${process.env.NEXT_PUBLIC_RAWG_URL}/games/${id}?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}`,
+      { headers: { Accept: "application/json" } }
     );
     const result = await response.json();
     return result;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getGamesByGenre = async (genre: Genre): Promise<Game[]> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_RAWG_URL}/games?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}&genres=${genre.id}`
+    );
+    const result = await response.json();
+    const data = result.results;
+    return data;
   } catch (error) {
     console.error(error);
     throw error;
@@ -36,7 +63,6 @@ export const getGameMovies = async (id: string): Promise<GameMovie[]> => {
       `${process.env.NEXT_PUBLIC_RAWG_URL}/games/${id}/movies?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}`
     );
     const result = await response.json();
-    console.log(result);
     return result.results;
   } catch (error) {
     console.error(error);

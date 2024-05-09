@@ -1,15 +1,16 @@
 "use client";
 
-import * as React from "react";
-import { cn } from "@/lib/utils";
-import { TbSearch } from "react-icons/tb";
-import { getGames } from "@/app/api/games";
-import { Game } from "@/types/game";
-import debounce from "lodash.debounce";
-import { CommandDialog } from "@/components/ui/command";
 import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
+import { CommandDialog } from "@/components/ui/command";
+import { Game } from "@/types/game";
+import { getGames } from "@/app/api/games";
 import { Input } from "./ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { SearchGameButton } from "./search-game-button";
+import { TbSearch } from "react-icons/tb";
+import * as React from "react";
+import debounce from "lodash.debounce";
 import Link from "next/link";
 
 export interface SearchBarProps
@@ -26,7 +27,7 @@ const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
     const debouncedFetchData = debounce(handleSearch, 300);
 
     async function handleSearch(search: string) {
-      setResults(await getGames(search));
+      setResults(await getGames({ searchText: search }));
       setLoading(false);
     }
 
@@ -39,6 +40,11 @@ const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
       setOpen(false);
     }
 
+    async function onOpen(e: React.MouseEvent<HTMLButtonElement>) {
+      setOpen(!open);
+      setResults(await getGames({ searchText: "" }));
+    }
+
     return (
       <div
         className={cn("", className)}
@@ -46,7 +52,7 @@ const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
         {...props}>
         {children}
         <Button
-          onClick={() => setOpen(!open)}
+          onClick={onOpen}
           variant={"icon"}>
           <TbSearch />
           <p className="hidden lg:block">Search games</p>
@@ -54,7 +60,7 @@ const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
         <CommandDialog
           open={open}
           onOpenChange={setOpen}>
-          <div className="space-y-2">
+          <div className="space-y-4 py-4 px-4 bg-accent-blue">
             <Input
               icon={TbSearch}
               onChange={handleChange}
@@ -62,18 +68,17 @@ const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
             />
             {!isLoading ? (
               <ScrollArea className="flex flex-col h-96">
-                {results.map((result, index) => (
-                  <ul key={index}>
-                    <Link href={`/games/${result.id}`}>
-                      <Button
-                        variant={"outline"}
-                        onClick={handleClick}
-                        className="w-full rounded-none">
-                        {result.name}
-                      </Button>
-                    </Link>
-                  </ul>
-                ))}
+                <ul className="space-y-2">
+                  {results.map((result, index) => (
+                    <li key={index}>
+                      <Link href={`/games/${result.id}`}>
+                        <SearchGameButton
+                          game={result}
+                          onClick={handleClick}></SearchGameButton>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </ScrollArea>
             ) : (
               <p className="h-96">Loading</p>

@@ -1,8 +1,8 @@
-import { BentoBox } from "@/components/ui/bento-box";
 import { createClient } from "@/utils/supabase/server";
 import { Game } from "@/types/game";
 import { GameDescriptionBox } from "@/components/game-description-box";
 import { GameImageBox } from "@/components/game-image-box";
+import { GameMetacriticBox } from "@/components/game-metacritic-box";
 import { GameMovie } from "@/types/movies";
 import { GameNameBox } from "@/components/game-name-box";
 import { GameReviewBox } from "@/components/game-review-box";
@@ -10,9 +10,13 @@ import { GameScreenshot } from "@/types/screenshot";
 import { GameScreenshotsBox } from "@/components/game-screenshots-box";
 import { getColourPalette } from "@/utils/colour";
 import { getGame, getGameMovies, getGameScreenshots } from "@/app/api/games";
+import { getReview, getReviewAuthor, getReviews } from "./actions";
 import DOMPurify from "isomorphic-dompurify";
-import { Review } from "@/components/review";
-import { User } from "@supabase/supabase-js";
+import { Reviews } from "@/components/reviews";
+import { BentoBox } from "@/components/ui/bento-box";
+import { GameStoresBox } from "@/components/game-stores-box";
+import { getGameStores } from "@/app/api/stores";
+import { GameActionsBox } from "@/components/game-actions-box";
 
 type GameProps = {
   params: {
@@ -32,75 +36,80 @@ export default async function GamePage({ params }: GameProps) {
   const sanitizedDescription = DOMPurify.sanitize(game.description, {
     USE_PROFILES: { html: false },
   });
-
-  const reviewData = await supabase
-    .from("reviews")
-    .select()
-    .eq("game_id", game.id);
+  const reviewData = await getReviews(game);
+  const userReviewData = await getReview(game, user);
+  const userReviewerData = await getReviewAuthor(user?.id);
+  const gameStores = await getGameStores(game.id);
 
   return (
-    <section className="flex flex-col lg:grid grid-rows-12 grid-cols-12 gap-4">
-      <GameNameBox
-        gameName={game.name}
-        platforms={game.platforms}
-        boxColour={colourPalette[4]}
-        className="col-span-4 flex items-center justify-between max-h-20"
-      />
-      <GameReviewBox
-        game={game}
-        user={user}
-        reviewAmount={reviewData.data?.length}
-        boxColour={colourPalette[3]}
-        className="col-span-4 row-start-2 row-span-2"
-      />
-      <GameImageBox
-        backgroundImage={game.background_image}
-        className=" col-start-5 col-span-8 row-span-6"
-      />
-      <BentoBox
-        className="col-span-4 row-span-3 row-start-4"
-        boxColour={colourPalette[0]}
-      />
-      <GameScreenshotsBox
-        screenshots={gameScreenshots}
-        className="col-span-7 row-span-5"
-      />
-      <GameDescriptionBox
-        description={sanitizedDescription}
-        boxColour={colourPalette[0]}
-        className="col-span-5 col-start-8 row-span-4"
-      />
-      <BentoBox
-        boxColour={colourPalette[2]}
-        header="Reviews"
-        className="col-span-5 col-start-8"
-      />
-      {reviewData.data?.map(async (review, index) => {
-        const { data } = await supabase
-          .from("profiles")
-          .select()
-          .eq("id", review.reviewer_id)
-          .single();
-
-        return (
-          <Review
-            key={index}
-            rating={review.rating}
-            text={review.text}
-            reviewerUsername={data?.username}
-            boxColour={colourPalette[3]}
-            className="col-span-12"
-          />
-        );
-      })}
-      {colourPalette.map((palette, index) => (
+    <div>
+      <section className="flex flex-col lg:grid grid-rows-11 grid-cols-12 gap-4">
+        <GameNameBox
+          game={game}
+          boxColour={colourPalette[4]}
+          className="col-span-4 flex items-center justify-between"
+        />
+        <GameReviewBox
+          game={game}
+          user={user}
+          reviews={reviewData}
+          reviewAuthor={userReviewerData}
+          userReview={userReviewData}
+          boxColour={colourPalette[0]}
+          className="col-span-4 row-start-2 row-span-3"
+        />
+        <GameActionsBox
+          game={game}
+          user={user}
+          boxColour={colourPalette[2]}
+          className="col-span-4 row-start-5"
+        />
+        <GameImageBox
+          backgroundImage={game.background_image}
+          className=" col-start-5 col-span-8 row-span-5"
+        />
+        {/* <GameMetacriticBox
+          boxColour={colourPalette[0]}
+          metacriticPlatforms={game.metacritic_platforms}
+          className="col-span-2 row-span-2 row-start-4"
+        /> */}
+        <GameScreenshotsBox
+          screenshots={gameScreenshots}
+          className="col-span-7 row-span-4"
+        />
+        <GameDescriptionBox
+          description={sanitizedDescription}
+          boxColour={colourPalette[0]}
+          className="col-span-3 col-start-8 row-span-3"
+        />
         <BentoBox
-          key={index}
-          boxColour={palette}
-          className="whitespace-break-spaces col-span-2">
-          {`[${index}]\n${palette.hex()}`}
-        </BentoBox>
-      ))}
-    </section>
+          boxColour={colourPalette[3]}
+          className="col-span-2 col-start-11 row-span-2"
+        />
+        <BentoBox
+          boxColour={colourPalette[3]}
+          className="col-span-2 col-start-11 row-span-2"
+        />
+        <BentoBox
+          boxColour={colourPalette[3]}
+          className="col-span-3 col-start-8"
+        />
+      </section>
+      <section className="flex flex-col gap-4 grid-cols-none grid-rows-none">
+        <Reviews
+          id="reviews"
+          backgroundColour={colourPalette[3]}
+          reviews={reviewData}
+        />
+        {colourPalette.map((palette, index) => (
+          <BentoBox
+            key={index}
+            boxColour={palette}
+            className="whitespace-break-spaces">
+            {`[${index}]\n${palette.hex()}`}
+          </BentoBox>
+        ))}
+      </section>
+    </div>
   );
 }
