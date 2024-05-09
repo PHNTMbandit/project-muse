@@ -45,7 +45,7 @@ export type Game = {
   reddit_count: number;
   reddit_description: string;
   reddit_logo: string;
-  reddit_url: number;
+  reddit_url: string;
   released: string;
   reviews_text_count: string;
   screenshots_count: number;

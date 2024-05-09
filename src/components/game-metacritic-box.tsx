@@ -26,20 +26,23 @@ const GameMetacriticBox = React.forwardRef<
     <BentoBox
       className={cn("", className)}
       ref={ref}
-      header="Metacritic"
       {...props}>
       {children}
-      <div className="flex flex-wrap gap-2">
-        {metacriticPlatforms
-          .sort((a, b) => a.platform.name.localeCompare(b.platform.name))
-          .map((score, index) => (
-            <MetascorePill
-              key={index}
-              pillColour={getMetacriticColour(score.metascore)}
-              metascore={score}
-            />
-          ))}
-      </div>
+      {metacriticPlatforms ? (
+        <div className="flex flex-wrap gap-2">
+          {metacriticPlatforms
+            .sort((a, b) => a.platform.name.localeCompare(b.platform.name))
+            .map((score, index) => (
+              <MetascorePill
+                key={index}
+                pillColour={getMetacriticColour(score.metascore)}
+                metascore={score}
+              />
+            ))}
+        </div>
+      ) : (
+        <p>No metacritic review information available</p>
+      )}
     </BentoBox>
   );
 });

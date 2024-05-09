@@ -1,6 +1,5 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { BentoBox, BentoBoxProps } from "./ui/bento-box";
 import { Tables } from "@/types/supabase";
 import { Review } from "./review";
 import { getReviewAuthor } from "@/app/games/[id]/actions";
@@ -29,7 +28,6 @@ const Reviews = React.forwardRef<HTMLDivElement, ReviewsProps>(
               review={review}
               reviewAuthor={reviewAuthor}
               boxColour={backgroundColour}
-              className="col-span-12"
             />
           );
         })}

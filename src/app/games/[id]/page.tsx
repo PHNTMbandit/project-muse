@@ -17,6 +17,9 @@ import { BentoBox } from "@/components/ui/bento-box";
 import { GameStoresBox } from "@/components/game-stores-box";
 import { getGameStores } from "@/app/api/stores";
 import { GameActionsBox } from "@/components/game-actions-box";
+import { GameReleasedBox } from "@/components/game-released-box";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 type GameProps = {
   params: {
@@ -43,7 +46,7 @@ export default async function GamePage({ params }: GameProps) {
 
   return (
     <div>
-      <section className="flex flex-col lg:grid grid-rows-11 grid-cols-12 gap-4">
+      <section className="flex flex-col lg:grid grid-rows-9 grid-cols-12 gap-4">
         <GameNameBox
           game={game}
           boxColour={colourPalette[4]}
@@ -66,7 +69,7 @@ export default async function GamePage({ params }: GameProps) {
         />
         <GameImageBox
           backgroundImage={game.background_image}
-          className=" col-start-5 col-span-8 row-span-5"
+          className="col-start-5 col-span-8 row-span-5"
         />
         {/* <GameMetacriticBox
           boxColour={colourPalette[0]}
@@ -82,33 +85,45 @@ export default async function GamePage({ params }: GameProps) {
           boxColour={colourPalette[0]}
           className="col-span-3 col-start-8 row-span-3"
         />
-        <BentoBox
-          boxColour={colourPalette[3]}
+        <GameReleasedBox
+          boxColour={colourPalette[1]}
+          className="col-span-2 col-start-11 row-span-2"
+          game={game}
+        />
+        <GameMetacriticBox
+          metacriticPlatforms={game.metacritic_platforms}
+          boxColour={colourPalette[2]}
           className="col-span-2 col-start-11 row-span-2"
         />
         <BentoBox
-          boxColour={colourPalette[3]}
-          className="col-span-2 col-start-11 row-span-2"
-        />
-        <BentoBox
-          boxColour={colourPalette[3]}
-          className="col-span-3 col-start-8"
-        />
+          boxColour={colourPalette[4]}
+          className="col-span-3 col-start-8">
+          <Link
+            href={game.website}
+            target={"_blank"}>
+            <Button variant={"link"}>Website</Button>
+          </Link>
+          <Link
+            href={game.reddit_url}
+            target={"_blank"}>
+            <Button variant={"link"}>Reddit</Button>
+          </Link>
+        </BentoBox>
       </section>
-      <section className="flex flex-col gap-4 grid-cols-none grid-rows-none">
+      <section className="flex flex-col gap-4 grid-cols-none grid-rows-none mt-4">
         <Reviews
           id="reviews"
           backgroundColour={colourPalette[3]}
           reviews={reviewData}
         />
-        {colourPalette.map((palette, index) => (
+        {/* {colourPalette.map((palette, index) => (
           <BentoBox
             key={index}
             boxColour={palette}
             className="whitespace-break-spaces">
             {`[${index}]\n${palette.hex()}`}
           </BentoBox>
-        ))}
+        ))} */}
       </section>
     </div>
   );
