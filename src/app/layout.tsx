@@ -24,7 +24,7 @@ export default function RootLayout({
           defaultTheme="dark"
           disableTransitionOnChange>
           <main>
-            <h2 className="text-center mt-4">
+            <h2 className="text-center mt-4 bg-secondary text-primary">
               This site is in pre-alpha and many features are still in
               development
             </h2>

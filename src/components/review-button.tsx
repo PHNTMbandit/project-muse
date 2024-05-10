@@ -70,43 +70,47 @@ const ReviewButton = React.forwardRef<HTMLDivElement, ReviewButtonProps>(
     React.useEffect(() => {
       const getSavedReview = async () => {
         if (user) {
-          const review = await supabase
+          const { data, error } = await supabase
             .from("reviews")
             .select()
             .eq("reviewer_id", user?.id)
-            .single();
-          setSavedReview(review.data);
+            .eq("game_id", game.id)
+            .maybeSingle();
+          setSavedReview(data);
         }
       };
       getSavedReview();
-    }, [supabase, user?.id, open, user]);
+    }, [supabase, user?.id, open, user, game.id]);
 
     function ReviewForm() {
       const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-          text: savedReview?.text,
-          rating: savedReview?.rating,
+          text: savedReview ? savedReview.text : "",
+          rating: savedReview ? savedReview.rating : 0.5,
         },
       });
 
       async function onSubmit(values: z.infer<typeof formSchema>) {
         if (user) {
           if (savedReview) {
-            await supabase
+            const { error } = await supabase
               .from("reviews")
               .update({
                 text: values.text,
                 rating: values.rating,
               })
               .eq("reviewer_id", user?.id);
+            console.error(error);
           } else {
-            await supabase.from("reviews").insert({
+            console.log(values);
+            const { error } = await supabase.from("reviews").insert({
               game_id: game.id,
-              reviewer_id: user?.id,
+              reviewer_id: user.id,
               text: values.text,
               rating: values.rating,
             });
+            console.error(error);
           }
 
           toast({
@@ -135,10 +139,10 @@ const ReviewButton = React.forwardRef<HTMLDivElement, ReviewButtonProps>(
                       {...field}
                     />
                   </FormControl>
-                  {field.value.length > 1000 ? (
-                    <p className="text-red-500">{field.value.length}/1000</p>
+                  {field.value?.length > 1000 ? (
+                    <p className="text-red-500">{field.value?.length}/1000</p>
                   ) : (
-                    <p>{field.value.length}/1000</p>
+                    <p>{field.value?.length}/1000</p>
                   )}
                   <FormMessage />
                 </FormItem>

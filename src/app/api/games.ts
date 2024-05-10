@@ -14,70 +14,66 @@ export const getGames = async ({
   searchText,
   size,
 }: GameQueryProps): Promise<Game[]> => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_RAWG_URL}/games?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}&search=${searchText}&search_precise=true&ordering=${ordering}&page_size=${size}`
-    );
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_RAWG_URL}/games?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}&search=${searchText}&search_precise=true&ordering=${ordering}&page_size=${size}`
+  );
 
-    const data = await response.json();
-    return data.results;
-  } catch (error) {
-    console.error(error);
-    throw error;
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
   }
+
+  const data = await response.json();
+  return data.results;
 };
 
 export const getGame = async (id: string): Promise<Game> => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_RAWG_URL}/games/${id}?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}`
-    );
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.error(error);
-    throw error;
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_RAWG_URL}/games/${id}?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
   }
+
+  return await response.json();
 };
 
 export const getGamesByGenre = async (genre: Genre): Promise<Game[]> => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_RAWG_URL}/games?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}&genres=${genre.id}`
-    );
-    const result = await response.json();
-    const data = result.results;
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw error;
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_RAWG_URL}/games?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}&genres=${genre.id}`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
   }
+
+  const result = await response.json();
+  return result.results;
 };
 
 export const getGameMovies = async (id: string): Promise<GameMovie[]> => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_RAWG_URL}/games/${id}/movies?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}`
-    );
-    const result = await response.json();
-    return result.results;
-  } catch (error) {
-    console.error(error);
-    throw error;
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_RAWG_URL}/games/${id}/movies?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}`
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
   }
+
+  const result = await response.json();
+  return result.results;
 };
 
 export const getGameScreenshots = async (
   game_pk: string
 ): Promise<GameScreenshot[]> => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_RAWG_URL}/games/${game_pk}/screenshots?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}`
-    );
-    const result = await response.json();
-    return result.results;
-  } catch (error) {
-    console.error(error);
-    throw error;
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_RAWG_URL}/games/${game_pk}/screenshots?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
   }
+
+  const result = await response.json();
+  return result.results;
 };
