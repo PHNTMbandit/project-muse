@@ -193,10 +193,10 @@ export default function SignUpPage() {
       <Dialog open={successfulSignUp}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
+            <DialogTitle>Confirm Account</DialogTitle>
             <DialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
+              Please check your email and confirm your account to take advantage
+              of the various features that your account grants you.
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
