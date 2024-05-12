@@ -21,6 +21,14 @@ import { RxReload } from "react-icons/rx";
 import { useState } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const signUpFormSchema = z
   .object({
@@ -45,6 +53,7 @@ const signUpFormSchema = z
 
 export default function SignUpPage() {
   const [loading, setloading] = useState(false);
+  const [successfulSignUp, setsuccessfulSignUp] = useState(false);
 
   const form = useForm<SignUpFormData>({
     resolver: zodResolver(signUpFormSchema),
@@ -58,7 +67,10 @@ export default function SignUpPage() {
 
   async function onSubmit(data: SignUpFormData) {
     setloading(true);
-    signup(data);
+    const signUp = signup(data);
+    signUp.then(() => {
+      setsuccessfulSignUp(true);
+    });
   }
 
   return (
@@ -178,6 +190,17 @@ export default function SignUpPage() {
           </BentoBox>
         </div>
       </div>
+      <Dialog open={successfulSignUp}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you absolutely sure?</DialogTitle>
+            <DialogDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
